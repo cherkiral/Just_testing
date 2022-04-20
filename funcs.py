@@ -1,18 +1,11 @@
-import requests
-from bs4 import BeautifulSoup
 import json
-from pprint import pprint
-import urllib3
 import time
+
+import requests
+import urllib3
+
 start_time = time.time()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-auth = {
-    'auth_token': 'e6feb3581da4d28bbc77794ea0e1ec8a433b351b',
-    'csrf_token': '89ef1a2b814d8840a5f3556c961e91e4aa5163ca8baa395b8847c55e00febab4ab8e4aa63b0cf860036fccd0dee14c961a29d086bd5947cce989d7fde50a2efae35db565defa6058027ad80d8d3a89b8',
-    'authorization_bearer': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-    'proxies': {'https': 'http://t6CauBkh:AhDnyuC3@62.76.7.247:50782'},
-}
 
 def post_tweet(aurhorization_list, message):
     url_block = "https://api.twitter.com/1.1/statuses/update.json"
