@@ -39,7 +39,7 @@ def like_post(aurhorization_list, tweet_id):
         try:
             status = json.loads(r.text)['errors'][0]['message']
             if status == 'You have already favorited this status.':
-                print('Твит уже лаукнут')
+                print('Твит уже лайкнут')
         except KeyError:
             pass
 
@@ -146,7 +146,7 @@ def comment_tweet(aurhorization_list, message, tweet_id): #пример: https:/
         try:
             status = json.loads(r.text)['errors'][0]['message']
             if status == "Status is a duplicate.":
-                print('Quote tweet уже сделан')
+                print('Комментарий уже оставлен')
         except KeyError:
             pass
     else:
