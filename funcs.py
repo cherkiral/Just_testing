@@ -16,19 +16,16 @@ def post_tweet(aurhorization_list, message):
                   'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
                   'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
     r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
-    flag = 0
 
-    if r.ok:
-        try:
-            status = json.loads(r.text)['text']
-            if status == message:
-                print('Успешно твитнуто')
-        except Exception:
-            flag += 1
-            pass
-    else:
+    try:
+        status = json.loads(r.text)['text']
+        if status == message:
+            print('Успешно твитнуто')
+        else:
+            print(r.text)
+    except Exception:
+        print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
         print(r.text)
-    return flag
 
 def like_post(aurhorization_list, tweet_id):
     url_block = "https://api.twitter.com/1.1/favorites/create.json"
@@ -38,29 +35,26 @@ def like_post(aurhorization_list, tweet_id):
                   'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
                   'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
     r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
-    flag = 0
 
-    if r.status_code < 500:
+    try:
+        status = r.json()['favorited']
+        if status == True:
+            print('Успешно лайкнул твит')
+        else:
+            print(r.text)
+    except Exception as err:
+        print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
         try:
             status = json.loads(r.text)['errors'][0]['message']
             if status == 'You have already favorited this status.':
                 print('Твит уже лайкнут')
+            else:
+                print(r.text)
         except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag+=1
-            pass
+            print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
+            print(r.text)
 
-        try:
-            status = r.json()['favorited']
-            if status == True:
-                print('Успешно лайкнул твит')
-        except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag += 1
-            pass
-    else:
-        print(r.text)
-    return flag
+
 
 def retweet_post(aurhorization_list, tweet_id):
     url_block = f"https://api.twitter.com/1.1/statuses/retweet/{tweet_id}.json"
@@ -70,59 +64,24 @@ def retweet_post(aurhorization_list, tweet_id):
                   'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
                   'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
     r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
-    flag = 0
 
-    if r.status_code < 500:
+    try:
+        status = r.json()["retweeted"]
+        if status == True:
+            print('Успешно ретвитнул')
+        else:
+            print(r.text)
+    except Exception as err:
+        print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
         try:
             status = json.loads(r.text)['errors'][0]['message']
             if status == "You have already retweeted this Tweet.":
                 print('Пост уже ретвитнут')
+            else:
+                print(r.text)
         except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag += 1
-            pass
-
-        try:
-            status = r.json()["retweeted"]
-            if status == True:
-                print('Успешно ретвитнул')
-        except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag += 1
-            pass
-    else:
-        print(r.text)
-
-def quote_tweet_post(aurhorization_list, message, tweet_status): #пример: https://twitter.com/JamesMelville/status/1516669369677406208
-    url_block = "https://api.twitter.com/1.1/statuses/update.json"
-    data = {"status": message, 'attachment_url': tweet_status}
-    cookie = "ct0=%s; auth_token=%s" % (aurhorization_list['csrf_token'], aurhorization_list['auth_token'])
-    user_agent = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
-                  'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
-                  'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
-    r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
-    flag = 0
-
-    if r.status_code < 500:
-        try:
-            status = json.loads(r.text)['text']
-            if status == message:
-                print('Успешно quote tweet')
-        except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag += 1
-            pass
-
-        try:
-            status = json.loads(r.text)['errors'][0]['message']
-            if status == "Status is a duplicate.":
-                print('Quote tweet уже сделан')
-        except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag += 1
-            pass
-    else:
-        print(r.text)
+            print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
+            print(r.text)
 
 def follow_user(aurhorization_list, user_id):
     url_block = "https://api.twitter.com/1.1/friendships/create.json"
@@ -132,19 +91,17 @@ def follow_user(aurhorization_list, user_id):
                   'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
                   'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
     r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
-    flag = 0
 
-    if r.status_code < 500:
-        try:
-            status = json.loads(r.text)['following']
-            if status == True:
-                print('Успешно подписан')
-        except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ {inspect.getframeinfo(inspect.currentframe()).function}: ')
-            flag += 1
-            pass
-    else:
+    try:
+        status = json.loads(r.text)['following']
+        if status == True:
+            print('Успешно подписан')
+        else:
+            print(r.text)
+    except Exception as err:
+        print(f'ОШИБКА В ФУНКЦИИ {inspect.getframeinfo(inspect.currentframe()).function}: ')
         print(r.text)
+
 
 def check_follow():
     pass
@@ -157,34 +114,53 @@ def comment_tweet(aurhorization_list, message, tweet_id): #пример: https:/
                   'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
                   'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
     r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
-    flag = 0
+
+    try:
+        status = json.loads(r.text)['text']
+        if message.split()[0] in status:
+            print('Успешно оставлен комментарий')
+        else:
+            print(r.text)
+    except Exception as err:
+        print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
+        try:
+            status = json.loads(r.text)['errors'][0]['message']
+            if status == "Status is a duplicate.":
+                print('Комментарий уже оставлен')
+            else:
+                print(r.text)
+        except Exception as err:
+            print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
+            print(r.text)
+
+
+def quote_tweet_post(aurhorization_list, message, tweet_status): #пример: https://twitter.com/JamesMelville/status/1516669369677406208
+    url_block = "https://api.twitter.com/1.1/statuses/update.json"
+    data = {"status": message, 'attachment_url': tweet_status}
+    cookie = "ct0=%s; auth_token=%s" % (aurhorization_list['csrf_token'], aurhorization_list['auth_token'])
+    user_agent = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
+                  'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
+                  'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
+    r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
+
 
     if r.status_code < 500:
         try:
             status = json.loads(r.text)['text']
-            if message in status:
-                print('Успешно оставлен комментарий')
+            if status == message:
+                print('Успешно quote tweet')
         except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag += 1
+            print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
+
             pass
 
         try:
             status = json.loads(r.text)['errors'][0]['message']
             if status == "Status is a duplicate.":
-                print('Комментарий уже оставлен')
+                print('Quote tweet уже сделан')
         except Exception as err:
-            print(f'ОШИБКА В ФУНКЦИИ: {err}')
-            flag += 1
+            print(f'ОШИБКА В ФУНКЦИИ: {inspect.getframeinfo(inspect.currentframe()).function}')
+
             pass
     else:
         print(r.text)
-
-
-if __name__ == '__main__':
-    follow_user(auth, '1070099092246802432')
-    retweet_post(auth, '1516706961894563846')
-    quote_tweet_post(auth,'@CryptoGenres @Cometgollums2 @Gatuso5050' , 'https://twitter.com/SamuelXeus/status/1516706961894563846')
-    like_post(auth, '1516706961894563846')
-    comment_tweet(auth, '@CryptoGenres @Cometgollums2 @Gatuso5050', '1516706961894563846')
-    print("--- %s seconds ---" % (time.time() - start_time))
