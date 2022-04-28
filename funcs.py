@@ -8,6 +8,18 @@ import inspect
 start_time = time.time()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+def get_userid(username):
+    url = f'https://api.twitter.com/2/users/by/username/{username}'
+    proxies = {
+        "https": "http://t6CauBkh:AhDnyuC3@62.76.7.247:50782"
+    }
+    headers = {
+        'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAOZ%2FbgEAAAAAkUzoTzciKSm58kGE%2BdGtaCOfHG4'
+                         '%3D8v5btJBbGqYm0cFILJitqlW0Wlhx8hd1OWWPkCrSBCxWNb7gd7 '
+    }
+    r = requests.get(url, headers=headers, proxies=proxies)
+    return str(r.json()['data']['id'])
+
 def post_tweet(aurhorization_list, message):
     url_block = "https://api.twitter.com/1.1/statuses/update.json"
     data = {"status": message}
