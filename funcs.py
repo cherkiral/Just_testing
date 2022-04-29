@@ -24,7 +24,7 @@ def post_tweet(aurhorization_list, message):
     url_block = "https://api.twitter.com/1.1/statuses/update.json"
     data = {"status": message}
     cookie = "ct0=%s; auth_token=%s" % (aurhorization_list['csrf_token'], aurhorization_list['auth_token'])
-    user_agent = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
+    user_agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36',
                   'X-Csrf-Token': aurhorization_list['csrf_token'], 'Content-Type': 'application/x-www-form-urlencoded',
                   'Authorization': aurhorization_list['authorization_bearer'], 'Cookie': cookie}
     r = requests.post(url_block, verify=False, headers=user_agent, data=data, proxies=aurhorization_list['proxies'])
@@ -114,6 +114,9 @@ def follow_user(aurhorization_list, user_id):
         print(f'ОШИБКА В ФУНКЦИИ {inspect.getframeinfo(inspect.currentframe()).function}: ')
         print(r.text)
 
+
+def follow_each_other(aurhorization_list, user_id):
+    pass
 
 def check_follow():
     pass
