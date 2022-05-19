@@ -8,11 +8,9 @@ import inspect
 start_time = time.time()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def get_userid(username):
+def get_userid(username, proxy):
     url = f'https://api.twitter.com/2/users/by/username/{username}'
-    proxies = {
-        "https": "http://t6CauBkh:AhDnyuC3@62.76.7.247:50782"
-    }
+    proxies = proxy
     headers = {
         'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAOZ%2FbgEAAAAAkUzoTzciKSm58kGE%2BdGtaCOfHG4'
                          '%3D8v5btJBbGqYm0cFILJitqlW0Wlhx8hd1OWWPkCrSBCxWNb7gd7 '

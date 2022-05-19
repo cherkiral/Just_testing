@@ -56,39 +56,44 @@ import os
 #     'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA', 'Cookie': cookie}
 # r = requests.get(url, verify=False, headers=user_agent, proxies=proxies)
 # print(r.text)
+#
+# path = os.getcwd()
+# os.chdir('Project data')
+#
+#
+#
+# with open('follow.txt') as f:
+#     b = []
+#     for line in f.readlines():
+#         b.append(line.rstrip())
+# follow_list = [acc.split('\t') for acc in b]
+#
+# with open('twitter_id.txt') as f:
+#     twitter_id_list = []
+#     for line in f.readlines():
+#         twitter_id_list.append(line.rstrip())
+#
+# with open('TagNumber.txt') as f:
+#     tag_number_list = []
+#     for line in f.readlines():
+#         tag_number_list.append(line.rstrip())
+#
+# for project_number in range(len(follow_list)):
+#     for my_acc in range(1, 5):
+#         for acc_to_follow in follow_list[project_number]:
+#             follow_user(data[f'{key}'], acc_to_follow)
+#
+#         retweet_post(data[f'{key}'], twitter_id_list[project_number])
+#
+#         like_post(data[f'{key}'], twitter_id_list[project_number])
+#
+#         for i in range(tag_number_list[project_number]):
+#             rand_user = users_list[random.randint(0, len(users_list) - 1)]
+#             rand_user_str += rand_user + ' '
+#             users_list.pop(users_list.index(rand_user))
+#         comment_tweet(data[f'{key}'], rand_user_str, twitter_id_list[project_number])
 
-path = os.getcwd()
 os.chdir('Project data')
 
-
-
 with open('follow.txt') as f:
-    b = []
-    for line in f.readlines():
-        b.append(line.rstrip())
-follow_list = [acc.split('\t') for acc in b]
-
-with open('twitter_id.txt') as f:
-    twitter_id_list = []
-    for line in f.readlines():
-        twitter_id_list.append(line.rstrip())
-
-with open('TagNumber.txt') as f:
-    tag_number_list = []
-    for line in f.readlines():
-        tag_number_list.append(line.rstrip())
-
-for project_number in range(len(follow_list)):
-    for my_acc in range(1, 5):
-        for acc_to_follow in follow_list[project_number]:
-            follow_user(data[f'{key}'], acc_to_follow)
-
-        retweet_post(data[f'{key}'], twitter_id_list[project_number])
-
-        like_post(data[f'{key}'], twitter_id_list[project_number])
-
-        for i in range(tag_number_list[project_number]):
-            rand_user = users_list[random.randint(0, len(users_list) - 1)]
-            rand_user_str += rand_user + ' '
-            users_list.pop(users_list.index(rand_user))
-        comment_tweet(data[f'{key}'], rand_user_str, twitter_id_list[project_number])
+    print(f.read().split())
